@@ -11,7 +11,8 @@ ENV HIGHCHARTS_MOMENT=n
 ENV OPENSSL_CONF=""
 
 RUN apt-get update && apt-get install -yy \
-    bzip2
+    bzip2 \ 
+    libsqlite3-dev
 
 COPY . /tmp/install
 RUN cd /tmp/install && /bin/bash ./install.sh
