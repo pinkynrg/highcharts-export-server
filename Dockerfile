@@ -1,4 +1,4 @@
-FROM node:buster-slim
+FROM node:stretch-slim
 
 ENV LANG C.UTF-8
 ENV PYTHONPATH /opt/client_web
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -yy \
     bzip2 \ 
     libsqlite3-dev \
     libfontconfig \ 
-    libssl1.1
+    libssl1.0.2
 
 COPY . /tmp/install
 RUN cd /tmp/install && /bin/bash ./install.sh
