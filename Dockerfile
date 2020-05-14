@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -yy \
     bzip2 \ 
     libsqlite3-dev \
     libfontconfig \ 
-    libssl1.0.2
+    libssl1.1
 
 COPY . /tmp/install
 RUN cd /tmp/install && /bin/bash ./install.sh
