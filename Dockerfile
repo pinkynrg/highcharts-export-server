@@ -12,7 +12,8 @@ ENV OPENSSL_CONF=""
 
 RUN apt-get update && apt-get install -yy \
     bzip2 \ 
-    libsqlite3-dev
+    libsqlite3-dev \
+    libfontconfig
 
 COPY . /tmp/install
 RUN cd /tmp/install && /bin/bash ./install.sh
