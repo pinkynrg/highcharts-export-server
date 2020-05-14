@@ -13,6 +13,8 @@ ENV OPENSSL_CONF=""
 RUN apt-get update && apt-get install -yy \
     bzip2
 
-RUN npm install --unsafe-perm -g highcharts-export-server@2.0.28
+COPY . /tmp/install
+RUN cd /tmp/install && /bin/bash ./install.sh
+RUN rm -R /tmp/install
 
 CMD highcharts-export-server -enableServer 1 -host 0.0.0.0 -port 7801
