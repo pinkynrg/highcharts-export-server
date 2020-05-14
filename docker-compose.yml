@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  highcharts-export-server:
+    container_name: highcharts-export-server
+    image: gitlab.facco.net:4567/faccos/highcharts-export-server/master:latest
+    restart: always
+    command: bash -c "sleep infinity"
+    ports:
+      - '7801:7801'
