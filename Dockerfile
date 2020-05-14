@@ -1,4 +1,4 @@
-FROM node:stretch
+FROM node:stretch-slim
 
 ENV LANG C.UTF-8
 ENV PYTHONPATH /opt/client_web
@@ -10,7 +10,12 @@ ENV HIGHCHARTS_USE_GANTT=n
 ENV HIGHCHARTS_MOMENT=n
 ENV OPENSSL_CONF=""
 
-RUN apt-get update && apt-get install -yy bzip2
+RUN apt-get update && apt-get install -yy \
+    bzip2 \ 
+    libsqlite3-dev \
+    libfontconfig \ 
+    libssl1.0.2 \ 
+    libicu57
 
 COPY . /tmp/install
 RUN cd /tmp/install && /bin/bash ./install.sh
