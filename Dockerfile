@@ -21,4 +21,4 @@ COPY . /tmp/install
 RUN cd /tmp/install && /bin/bash ./install.sh
 RUN rm -R /tmp/install
 
-CMD highcharts-export-server -enableServer 1 -host 0.0.0.0 -port 7801
+CMD highcharts-export-server -enableServer 1 -workers 1 -workLimit 1 -host 0.0.0.0 -port 7801
