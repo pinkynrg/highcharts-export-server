@@ -1,4 +1,7 @@
 variables:
+  IMAGE_DOCKERHUB_ARM32: pinkynrg/highcharts-export-server-arm32
+  IMAGE_DOCKERHUB_X86: pinkynrg/highcharts-export-server-x86
+  IMAGE_DOCKERHUB: pinkynrg/highcharts-export-server
   IMAGE_ARM32: $CI_REGISTRY_IMAGE/arm32
   IMAGE_X86: $CI_REGISTRY_IMAGE/x86
   IMAGE: $CI_REGISTRY_IMAGE
@@ -15,10 +18,20 @@ build_docker_image_arm32:
     GIT_BRANCH_NAME: $CI_COMMIT_REF_NAME
   script:
     - DATE=$(date +%Y.%m.%d.%H.%M.%S)
+    - docker build --pull --no-cache 
+      --tag $IMAGE_ARM32/$GIT_BRANCH_NAME:$DATE 
+      --tag $IMAGE_ARM32/$GIT_BRANCH_NAME:latest 
+      --tag $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:$DATE
+      --tag $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:latest 
+      --label version=$DATE .
+    # push image to gilab
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build --pull --no-cache --tag $IMAGE_ARM32/$GIT_BRANCH_NAME:$DATE --tag $IMAGE_ARM32/$GIT_BRANCH_NAME:latest --label version=$DATE .
     - docker push $IMAGE_ARM32/$GIT_BRANCH_NAME:$DATE
     - docker push $IMAGE_ARM32/$GIT_BRANCH_NAME:latest
+    # push image to dockerhub
+    - docker login --username=pinkynrg --password=$DOCKERHUB_PASSWORD
+    - docker push $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:$DATE
+    - docker push $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:latest
   tags:
     - docker-arm32
   only:
@@ -32,10 +45,20 @@ build_docker_image_x86:
     GIT_BRANCH_NAME: $CI_COMMIT_REF_NAME
   script:
     - DATE=$(date +%Y.%m.%d.%H.%M.%S)
+    - docker build --pull --no-cache 
+      --tag $IMAGE_X86/$GIT_BRANCH_NAME:$DATE 
+      --tag $IMAGE_X86/$GIT_BRANCH_NAME:latest 
+      --tag $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:$DATE 
+      --tag $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:latest 
+      --label version=$DATE .
+    # push image to gilab
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build --pull --no-cache --tag $IMAGE_X86/$GIT_BRANCH_NAME:$DATE --tag $IMAGE_X86/$GIT_BRANCH_NAME:latest --label version=$DATE .
     - docker push $IMAGE_X86/$GIT_BRANCH_NAME:$DATE
     - docker push $IMAGE_X86/$GIT_BRANCH_NAME:latest
+    # push image to dockerhub
+    - docker login --username=pinkynrg --password=$DOCKERHUB_PASSWORD
+    - docker push $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:$DATE
+    - docker push $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:latest
   tags:
     - docker-x86
   only:
@@ -56,11 +79,18 @@ create_manifest:
     - "echo -e '{\n  \"experimental\": \"enabled\"\n}' | tee $HOME/.docker/config.json"
     - docker version
     # END - enable experimental #
+    # push image to gilab
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker manifest create $IMAGE/$GIT_BRANCH_NAME:latest
       --amend $IMAGE_X86/$GIT_BRANCH_NAME:latest
       --amend $IMAGE_ARM32/$GIT_BRANCH_NAME:latest
     - docker manifest push $IMAGE/$GIT_BRANCH_NAME:latest
+    # push manifest to dockerhub
+    - docker login --username=pinkynrg --password=$DOCKERHUB_PASSWORD
+    - docker manifest create $IMAGE_DOCKERHUB-$GIT_BRANCH_NAME:latest
+      --amend $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:latest
+      --amend $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:latest
+    - docker manifest push $IMAGE_DOCKERHUB-$GIT_BRANCH_NAME:latest
   tags:
     - docker-x86
   only:
