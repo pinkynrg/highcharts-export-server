@@ -1,7 +1,7 @@
 variables:
-  IMAGE_DOCKERHUB_ARM32: pinkynrg/highcharts-export-server-arm32
-  IMAGE_DOCKERHUB_X86: pinkynrg/highcharts-export-server-x86
-  IMAGE_DOCKERHUB: pinkynrg/highcharts-export-server
+  IMAGE_DOCKERHUB_ARM32: faccos/highcharts-export-server-arm32
+  IMAGE_DOCKERHUB_X86: faccos/highcharts-export-server-x86
+  IMAGE_DOCKERHUB: faccos/highcharts-export-server
   IMAGE_ARM32: $CI_REGISTRY_IMAGE/arm32
   IMAGE_X86: $CI_REGISTRY_IMAGE/x86
   IMAGE: $CI_REGISTRY_IMAGE
@@ -29,7 +29,7 @@ build_docker_image_arm32:
     - docker push $IMAGE_ARM32/$GIT_BRANCH_NAME:$DATE
     - docker push $IMAGE_ARM32/$GIT_BRANCH_NAME:latest
     # push image to dockerhub
-    - docker login --username=pinkynrg --password=$DOCKERHUB_PASSWORD
+    - docker login --username=$DOCKERHUB_USERNAME --password=$DOCKERHUB_PASSWORD
     - docker push $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:$DATE
     - docker push $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:latest
   tags:
@@ -56,7 +56,7 @@ build_docker_image_x86:
     - docker push $IMAGE_X86/$GIT_BRANCH_NAME:$DATE
     - docker push $IMAGE_X86/$GIT_BRANCH_NAME:latest
     # push image to dockerhub
-    - docker login --username=pinkynrg --password=$DOCKERHUB_PASSWORD
+    - docker login --username=$DOCKERHUB_USERNAME --password=$DOCKERHUB_PASSWORD
     - docker push $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:$DATE
     - docker push $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:latest
   tags:
@@ -86,7 +86,7 @@ create_manifest:
       --amend $IMAGE_ARM32/$GIT_BRANCH_NAME:latest
     - docker manifest push $IMAGE/$GIT_BRANCH_NAME:latest
     # push manifest to dockerhub
-    - docker login --username=pinkynrg --password=$DOCKERHUB_PASSWORD
+    - docker login --username=$DOCKERHUB_USERNAME --password=$DOCKERHUB_PASSWORD
     - docker manifest create $IMAGE_DOCKERHUB-$GIT_BRANCH_NAME:latest
       --amend $IMAGE_DOCKERHUB_X86-$GIT_BRANCH_NAME:latest
       --amend $IMAGE_DOCKERHUB_ARM32-$GIT_BRANCH_NAME:latest
