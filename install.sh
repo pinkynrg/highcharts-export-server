@@ -6,4 +6,4 @@ if [ "$(uname -m)" == "armv7l" ]; then
   chmod 775 /usr/bin/phantomjs
 fi
 
-npm install --unsafe-perm -g highcharts-export-server@2.0.28
+npm install --unsafe-perm -g highcharts-export-server@2.0.30

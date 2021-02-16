@@ -11,6 +11,7 @@ ENV HIGHCHARTS_MOMENT=n
 ENV OPENSSL_CONF=""
 
 RUN apt-get update && apt-get install --no-install-recommends -yy \
+    ca-certificates \
     bzip2 \ 
     libsqlite3-dev \
     libfontconfig \ 
