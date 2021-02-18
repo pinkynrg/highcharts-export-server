@@ -6,4 +6,6 @@ if [ "$(uname -m)" == "armv7l" ]; then
   chmod 775 /usr/bin/phantomjs
 fi
 
+cp -R /tmp/install/fonts/* /usr/share/fonts/truetype
+
 npm install --unsafe-perm -g highcharts-export-server@2.0.30
